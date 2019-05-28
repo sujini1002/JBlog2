@@ -10,4 +10,7 @@
 		select no,id,name,description from category where id = #{_parameter}
 	</select>
 	
+	<delete id="delete" parameterType="string">
+		delete from category where id = #{_parameter}
+	</delete>
 </mapper>

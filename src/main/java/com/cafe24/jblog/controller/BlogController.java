@@ -82,6 +82,9 @@ public class BlogController {
 	//카테고리 삭제(인터셉터)
 	@RequestMapping("/admin/category/delete")
 	public String adminDeleteCategory(@PathVariable(value="id")String id) {
+		blogService.deleteCategory(id);
 		return "redirect:/"+id+"/admin/category";
-	}
+	} 
+	
+	 
 }

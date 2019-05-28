@@ -83,5 +83,10 @@ public class BlogService {
 		
 		return filename;
 	}
+	public Boolean deleteCategory(String id) {
+		return categoryDao.delete(id);
+	}
+
+	
  
 }

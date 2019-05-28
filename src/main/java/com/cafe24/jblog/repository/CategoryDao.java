@@ -23,4 +23,9 @@ public class CategoryDao {
 		return 1==cnt;
 	}
 
+	public Boolean delete(String id) {
+		int cnt = sqlSession.delete("category.delete",id);
+		return 1==cnt;
+	}
+
 }
