@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="category">
+	
+	<insert id="insert" parameterType="categoryvo">
+		insert into category values(null,#{id},#{name},#{description},now())
+	</insert>
+	
+	<select id="getById" parameterType="string" resultType="categoryvo">
+		select no,id,name,description from category where id = #{_parameter}
+	</select>
+	
+</mapper>
