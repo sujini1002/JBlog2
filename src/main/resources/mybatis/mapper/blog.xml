@@ -2,12 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="blog">
 	<insert id="insert" parameterType="string">
-		insert into blog values(#{id},#{title},#{logo}); 
+	<![CDATA[
+		insert into blog values(#{id},#{title},#{logo})
+	]]>
 	</insert>
 	<select id="getBlogById" parameterType="string" resultType="blogvo">
+	<![CDATA[
 		select id,title,logo from blog where id = #{parameter}
+	]]>
 	</select>
 	<update id="updateSkin" parameterType="blogvo">
+	<![CDATA[
 		update blog set title=#{title}, logo=#{logo} where id = #{id}
+	]]>
 	</update>
 </mapper>

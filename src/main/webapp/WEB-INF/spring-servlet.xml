@@ -71,13 +71,15 @@
 			<mvc:mapping path="/user/logout"/>
 			<bean class="com.cafe24.security.AuthLogoutInterceptor"/>
 		</mvc:interceptor>
-		<!-- <mvc:interceptor>
+		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/"/>
 			<mvc:exclude-mapping path="/user/auth"/>
 			<mvc:exclude-mapping path="/user/logout"/>
+			<mvc:exclude-mapping path="/user/**"/>
 			<mvc:exclude-mapping path="/assets/**"/>
-			<bean class="com.cafe24.security.AuthInterceptor"/>
-		</mvc:interceptor> -->
+			<bean class="com.cafe24.security.AdminInterceptor"/>
+		</mvc:interceptor>
 	</mvc:interceptors>
 
 	<!-- 멀티파트 리졸버 -->
@@ -91,7 +93,7 @@
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>
 	<!-- the mvc resources url mapping -->
-	<mvc:resources mapping="/images/**" location="file:/jblog-uploads/" />
+	<mvc:resources mapping="/images/**" location="file:/jblog-uploads/" order="0" />
 	
 	<!-- 빈설정을 annotation으로 한다.(자동스캐닝 @Controller에 대한 auto scanning) -->
 	<context:annotation-config /><!-- 어노테이션이 붙은 클래스를 찾아서 컨테이너에 등록 -->

@@ -15,15 +15,24 @@
 		<div id="wrapper">
 			<div id="content" class="full-screen">
 				<c:import url="/WEB-INF/views/includes/blog-admin-menu.jsp"/>
-				<form action="" method="post">
+				<form action="${pageContext.request.contextPath}/${authUser.id}/admin/write" method="post">
 			      	<table class="admin-cat-write">
 			      		<tr>
 			      			<td class="t">제목</td>
 			      			<td>
 			      				<input type="text" size="60" name="title">
-				      			<select name="category">
-				      				<option>미분류</option>
-				      				<option>자바</option>
+				      			<select name="category_no">
+			      					<c:forEach items="${categoryList }" var="vo" varStatus="status">
+			      						<c:choose>
+			      							<c:when test="${status.index eq 0 }">
+			      								<option value="${vo.no}" selected="selected">${vo.name }</option>
+			      							</c:when>
+			      							<c:otherwise>
+			      								<option value="${vo.no}">${vo.name }</option>
+			      							</c:otherwise>
+			      						</c:choose>
+				      					
+				      				</c:forEach>
 				      			</select>
 				      		</td>
 			      		</tr>

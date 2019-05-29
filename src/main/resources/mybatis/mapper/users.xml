@@ -3,14 +3,22 @@
 
 <mapper namespace="users">
 	<insert id="insert" parameterType="uservo">
+	<![CDATA[
 		insert into users values(#{id},#{name},#{password},now())
+	]]>
 	</insert>
 	
 	<select id="getById" parameterType="string" resultType="uservo">
+	<![CDATA[
 		select id,name,password from users where id = #{_parameter}
+	]]>
 	</select>
 	
 	<select id="getByIdPassword" parameterType="uservo" resultType="uservo">
+	<![CDATA[
 		select id,name,password from users where id = #{id} and password= #{password}
+	]]>
 	</select>
+	
+	
 </mapper>

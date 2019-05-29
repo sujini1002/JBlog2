@@ -3,14 +3,25 @@
 <mapper namespace="category">
 	
 	<insert id="insert" parameterType="categoryvo">
+	<![CDATA[
 		insert into category values(null,#{id},#{name},#{description},now())
+	]]>
 	</insert>
 	
 	<select id="getById" parameterType="string" resultType="categoryvo">
-		select no,id,name,description from category where id = #{_parameter}
+		<![CDATA[
+			select no,id,name,description from category where id = #{_parameter} order by reg_date
+		]]>
 	</select>
 	
-	<delete id="delete" parameterType="string">
-		delete from category where id = #{_parameter}
+	<delete id="delete" parameterType="categoryvo">
+	<![CDATA[
+		delete from category where id = #{id} and no = #{no} 
+	]]>
 	</delete>
+	<select id="basicNo" parameterType="string" resultType="long">
+	<![CDATA[
+			select min(no) from category where id = #{_parameter}
+	]]>
+	</select>
 </mapper>

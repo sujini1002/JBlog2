@@ -32,7 +32,7 @@
 						<td>${vo.name }</td>
 						<td>10</td>
 						<td>${vo.description }</td>
-						<td><a href="${pageContext.request.contextPath}/${authUser.id}/admin/category/delete"><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a></td>
+						<td><a href="${pageContext.request.contextPath}/${authUser.id}/admin/category/delete/${vo.no}"><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></a></td>
 					</tr>  
 					</c:forEach>					  
 				</table>
@@ -42,12 +42,12 @@
 		      	<form id="category-form" method="post" action="${pageContext.servletContext.contextPath }/${authUser.id}/admin/category/add">
 		      		<tr>
 		      			<td class="t">카테고리명</td>
-							<td><input name="name" value=""/>
+							<td><input name="name" type="text" value=""/>
 							</td>
-						</tr>
+					</tr>
 		      		<tr>
 		      			<td class="t">설명</td>
-		      			<td><input name="description" value=""/>
+		      			<td><input name="description" type="text" value=""/>
 		      			</td>
 		      		</tr>
 		      		<tr>

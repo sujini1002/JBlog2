@@ -1,26 +1,26 @@
 package com.cafe24.jblog.controller;
 
 import java.util.List;
-
-import javax.validation.Valid;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cafe24.jblog.service.BlogService;
 import com.cafe24.jblog.vo.BlogVo;
 import com.cafe24.jblog.vo.CategoryVo;
+import com.cafe24.jblog.vo.PostVo;
 
 @Controller
-@RequestMapping("/{id:(?!assets).*}")
+@RequestMapping("/{id:(?!images|assets).*}")
 public class BlogController {
 	
 	@Autowired
@@ -28,14 +28,31 @@ public class BlogController {
 	
 	
 	//블로그가기
-	@RequestMapping("")
-	public String goToBlog(@PathVariable(value="id")String id,ModelMap modelMap) {
+	@RequestMapping(value= {"","/{c_no}","/{c_no}/{p_no}"})
+	public String goToBlog(@PathVariable(value="id")String id,
+							@PathVariable(value="c_no")Optional<Long> c_no,
+							@PathVariable(value="p_no")Optional<Long> p_no,
+							ModelMap modelMap) {
 		//블로그 정보
 		BlogVo blogVo = blogService.getAdminBlog(id);
 		modelMap.put("blogVo", blogVo);
 		//카테고리 목록
 		List<CategoryVo> categoryList = blogService.getCategory(id);
 		modelMap.put("categoryList", categoryList);
+		
+		//PathVariable의 기본 값 셋팅
+		Long category_no = c_no.isPresent()?c_no.get():0;
+		Long post_no = p_no.isPresent()?p_no.get():0;
+		
+		//화면에 보여질 페이지 
+		PostVo postVo = blogService.getPost(id,category_no,post_no);
+		modelMap.put("postVo",postVo);
+		
+		//화면에 보여질 카테고리에 해당하는 포스트 리스트
+		List<PostVo> postList = blogService.getPostList(category_no,id);
+		modelMap.put("postList", postList);
+		//포스트 리스트 이동을 위한 id
+		modelMap.put("adminId", id);
 		
 		return "blog/blog-main";
 	}
@@ -60,13 +77,11 @@ public class BlogController {
 	//블로그 관리 카테고리 페이지 보여주기(인터셉터)
 	@RequestMapping("/admin/category")
 	public String adminCategory(@PathVariable(value="id")String id,ModelMap modelMap) {
-		System.out.println("adminCategory에 들어모");
 		//블로그 정보
 		BlogVo blogVo = blogService.getAdminBlog(id);
 		modelMap.put("blogVo", blogVo);
 		//카테고리 정보
 		List<CategoryVo> categoryList = blogService.getCategory(id);
-		System.out.println(categoryList);
 		modelMap.put("categoryList", categoryList);
 		
 		return "blog/blog-admin-category";
@@ -80,11 +95,30 @@ public class BlogController {
 	}
 	
 	//카테고리 삭제(인터셉터)
-	@RequestMapping("/admin/category/delete")
-	public String adminDeleteCategory(@PathVariable(value="id")String id) {
-		blogService.deleteCategory(id);
+	@RequestMapping("/admin/category/delete/{no}")
+	public String adminDeleteCategory(@PathVariable(value="id")String id,@PathVariable(value="no")long no) {
+		blogService.deleteCategory(id,no);
 		return "redirect:/"+id+"/admin/category";
 	} 
 	
-	 
+	//글 작성 폼(인터셉터)
+	@RequestMapping(value="/admin/write",method = RequestMethod.GET)
+	public String adminWrite(@PathVariable(value="id")String id,Model model) {
+		//카테고리 정보가져오기
+		List<CategoryVo> categoryList = blogService.getCategory(id);
+		model.addAttribute("categoryList", categoryList);
+		
+		return "blog/blog-admin-write";
+	}
+	
+	//글 작성(인터셉터)
+	@RequestMapping(value="/admin/write",method = RequestMethod.POST)
+	public String adminWirte(@PathVariable(value="id")String id,@ModelAttribute PostVo postVo) {
+		//글 작성
+		blogService.writePost(postVo);
+		
+		//글작성한 페이지로 가기
+		return "redirect:/"+id+"/"+postVo.getCategory_no()+"/"+blogService.getPostId(postVo.getCategory_no());
+	}
+	
 }

@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="users">
+<mapper namespace="post">
+	<insert id="insert" parameterType="postvo">
+		<![CDATA[
+		insert into post values(null,#{category_no},#{title},#{content},now())
+		]]>
+	</insert>
+	<select id="getId" parameterType="long" resultType="long">
+	<![CDATA[
+		select max(no) from post where category_no = #{_parameter}
+	]]>
+	</select>
+	<select id="getPost" parameterType="postvo" resultType="postvo">
+	<![CDATA[
+		select no, category_no, title, content, date_format(reg_date,'%Y-%m-%d %H:%i:%s') as reg_date 
+		from post where category_no = #{category_no} and no = #{no}
+	]]>
+	</select>
+	<select id="getList" parameterType="map" resultType="postvo">
+	<![CDATA[
+		select p.no,p.category_no,p.title,date_format(p.reg_date,'%Y/%m/%d') as reg_date
+		from post p join category c
+		on p.category_no = c.no
+		where p.category_no = #{category_no}
+		and c.id=#{id} 
+		order by p.reg_date desc
+	]]>
+	</select>
 </mapper>
