@@ -22,18 +22,29 @@ public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 		
 		String id = request.getParameter("id");
 		String password = request.getParameter("password");
-	
+		
+		//이미로그인한 상태면
+		HttpSession session = request.getSession(true);
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		
+		if(authUser != null) {
+			response.sendRedirect(request.getContextPath()+"/"+authUser.getId());
+			return false;
+		}
+		
+		
+		
 		UserVo userVo = new UserVo();
 		userVo.setId(id);
 		userVo.setPassword(password);
 		
-		UserVo authUser = userService.userExist(userVo);
+		authUser = userService.userExist(userVo);
 		if(authUser == null) {
 			response.sendRedirect(request.getContextPath()+"/user/login");
 			return false;
 		}
 		//세션 처리
-		HttpSession session = request.getSession(true);
+		
 		session.setAttribute("authUser", authUser);
 		//자신의 블로그로 가기
 		response.sendRedirect(request.getContextPath()+"/"+authUser.getId());

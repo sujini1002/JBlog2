@@ -3,12 +3,17 @@ package com.cafe24.jblog.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,15 +73,17 @@ public class BlogController {
 	@RequestMapping("/admin/update")
 	public String adminSkinUpdate(@ModelAttribute BlogVo blogVo,@RequestParam("logoFile")MultipartFile logoFile) {
 		//로고 저장 서비스 호출
-		blogVo.setLogo(blogService.fileRestore(logoFile));
+		if(logoFile.isEmpty()==false) {
+			blogVo.setLogo(blogService.fileRestore(logoFile));
+		}
 		//수정
 		blogService.updateSkin(blogVo);
 		return "redirect:/"+blogVo.getId()+"/admin/basic";
 	}
 	
 	//블로그 관리 카테고리 페이지 보여주기(인터셉터)
-	@RequestMapping("/admin/category")
-	public String adminCategory(@PathVariable(value="id")String id,ModelMap modelMap) {
+	@GetMapping("/admin/category")
+	public String adminCategory(@PathVariable(value="id")String id,ModelMap modelMap,@ModelAttribute CategoryVo categoryVo) {
 		//블로그 정보
 		BlogVo blogVo = blogService.getAdminBlog(id);
 		modelMap.put("blogVo", blogVo);
@@ -88,32 +95,59 @@ public class BlogController {
 	}
 	
 	//카테고리 추가(인터셉터 및 Valid)
-	@RequestMapping("/admin/category/add")
-	public String adminAddCategory(@PathVariable(value="id")String id,@ModelAttribute CategoryVo categoryVo) {
-		blogService.addCategory(id,categoryVo);
-		return "redirect:/"+id+"/admin/category";
+	@PostMapping("/admin/category")
+	public String adminAddCategory(
+			@PathVariable(value="id")String id,
+			@ModelAttribute @Valid CategoryVo categoryVo,
+			BindingResult result,
+			Model model	) {
+		// Valid 체크가 틀릴 시, join form으로 넘김
+		if (result.hasErrors()) {
+			model.addAttribute(result.getModel()); // Map으로 보내줌
+			//카테고리 리스트 
+			List<CategoryVo> categoryList = blogService.getCategory(id);
+			model.addAttribute("categoryList", categoryList);
+			
+			return "blog/blog-admin-category";
+		}
+		blogService.addCategory(id, categoryVo);
+		return "redirect:/" + id + "/admin/category";
 	}
 	
 	//카테고리 삭제(인터셉터)
 	@RequestMapping("/admin/category/delete/{no}")
 	public String adminDeleteCategory(@PathVariable(value="id")String id,@PathVariable(value="no")long no) {
 		blogService.deleteCategory(id,no);
+		
 		return "redirect:/"+id+"/admin/category";
 	} 
 	
 	//글 작성 폼(인터셉터)
 	@RequestMapping(value="/admin/write",method = RequestMethod.GET)
-	public String adminWrite(@PathVariable(value="id")String id,Model model) {
+	public String adminWrite(@PathVariable(value="id")String id,@ModelAttribute PostVo postVo,ModelMap modelMap) {
 		//카테고리 정보가져오기
 		List<CategoryVo> categoryList = blogService.getCategory(id);
-		model.addAttribute("categoryList", categoryList);
-		
+		modelMap.put("categoryList", categoryList);
+		//블로그 정보
+		BlogVo blogVo = blogService.getAdminBlog(id);
+		modelMap.put("blogVo", blogVo);
+
 		return "blog/blog-admin-write";
 	}
 	
 	//글 작성(인터셉터)
 	@RequestMapping(value="/admin/write",method = RequestMethod.POST)
-	public String adminWirte(@PathVariable(value="id")String id,@ModelAttribute PostVo postVo) {
+	public String adminWirte(@PathVariable(value="id")String id,@ModelAttribute @Valid PostVo postVo,
+							BindingResult result,Model model) {
+		
+		
+		// Valid 체크가 틀릴 시, join form으로 넘김
+		if (result.hasErrors()) {
+			model.addAttribute(result.getModel()); // Map으로 보내줌
+			List<CategoryVo> categoryList = blogService.getCategory(id);
+			model.addAttribute("categoryList", categoryList);
+			return "blog/blog-admin-write";
+		}
 		//글 작성
 		blogService.writePost(postVo);
 		

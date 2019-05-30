@@ -26,6 +26,10 @@ public class BlogDao {
 		return 1==cnt;
 	}
 
+	public String getBlogTitleById(String id) {
+		return sqlSession.selectOne("blog.getBlogTitleById",id);
+	}
+
 	
 
 

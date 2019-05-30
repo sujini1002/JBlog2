@@ -1,3 +1,5 @@
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -15,16 +17,17 @@
 		<div id="wrapper">
 			<div id="content" class="full-screen">
 				<c:import url="/WEB-INF/views/includes/blog-admin-menu.jsp"/>
-				<form action="${pageContext.request.contextPath}/${authUser.id}/admin/write" method="post">
+				<form:form modelAttribute="postVo" id="post" name ="post"
+					action="${pageContext.request.contextPath}/${authUser.id}/admin/write" method="post">
 			      	<table class="admin-cat-write">
 			      		<tr>
 			      			<td class="t">제목</td>
 			      			<td>
-			      				<input type="text" size="60" name="title">
+			      				<form:input path="title"/>
 				      			<select name="category_no">
 			      					<c:forEach items="${categoryList }" var="vo" varStatus="status">
 			      						<c:choose>
-			      							<c:when test="${status.index eq 0 }">
+			      							<c:when test="${vo.name eq '기본'}">
 			      								<option value="${vo.no}" selected="selected">${vo.name }</option>
 			      							</c:when>
 			      							<c:otherwise>
@@ -36,16 +39,18 @@
 				      			</select>
 				      		</td>
 			      		</tr>
+			      		<tr><td colspan="2"><p class="validCheck"><form:errors path="title"/></p></td></tr>
 			      		<tr>
 			      			<td class="t">내용</td>
-			      			<td><textarea name="content"></textarea></td>
+			      			<td><form:textarea path="content"></form:textarea></td>
 			      		</tr>
+			      		<tr><td colspan="2"><p class="validCheck"><form:errors path="content"/></p></td></tr>
 			      		<tr>
 			      			<td>&nbsp;</td>
 			      			<td class="s"><input type="submit" value="포스트하기"></td>
 			      		</tr>
 			      	</table>
-				</form>
+				</form:form>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/blog-footer.jsp"/>

@@ -23,18 +23,14 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private BlogDao blogDao;
 	
-	@Autowired
-	private PostDao postDao;
-	
-	@Autowired
-	private CategoryDao categoryDao;
-	
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		String uri = request.getRequestURI();
 		String[] uriArr = uri.split("/");
+		String beforeUrl = (String)request.getHeader("REFERER");
+		
 		
 		//1. handler 종류 확인
 		if(handler instanceof HandlerMethod == false) {
@@ -76,7 +72,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
 		
 		//7. 로그인한 사용자와 블로그 주인이 다를 때 : admin 페이지 불가(false)
 		if(uriArr[2].equals(authUser.getId())==false) {
-			response.sendRedirect(request.getContextPath());
+			response.sendRedirect(request.getContextPath()+"/"+uriArr[2]);
 			return false;
 		}
 		//8. 블로그 주인과 로그인한 사용자가 같을 때 해당 블로그가 존재하는지 체크

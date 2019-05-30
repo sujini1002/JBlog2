@@ -10,7 +10,10 @@
 	
 	<select id="getById" parameterType="string" resultType="categoryvo">
 		<![CDATA[
-			select no,id,name,description from category where id = #{_parameter} order by reg_date
+			select c.no,c.id,c.name,c.description,(select count(*) from post where category_no = c.no) as cetegory_cnt
+			from category c
+			where id = #{_parameter} 
+			order by c.reg_date desc;
 		]]>
 	</select>
 	
@@ -22,6 +25,12 @@
 	<select id="basicNo" parameterType="string" resultType="long">
 	<![CDATA[
 			select min(no) from category where id = #{_parameter}
+	]]>
+	</select>
+	
+	<select id="getByNo" parameterType="long" resultType="long">
+	<![CDATA[
+			select no from category where no = #{_parameter}
 	]]>
 	</select>
 </mapper>

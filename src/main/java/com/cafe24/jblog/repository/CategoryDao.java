@@ -31,5 +31,9 @@ public class CategoryDao {
 	public Long basicCateNo(String id) {
 		return sqlSession.selectOne("category.basicNo", id);
 	}
+	
+	public Long getByNo(long no) {
+		return sqlSession.selectOne("category.getByNo", no);
+	}
 
 }

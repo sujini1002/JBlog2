@@ -24,6 +24,11 @@ public class UserService {
 
 	public Boolean join(UserVo userVo) {
 		boolean result = false;
+		
+		//아이디 체크
+		if(userDao.getById(userVo.getId())!=null) {
+			return false;
+		}
 		//사용자 추가
 		result=userDao.insert(userVo);
 		

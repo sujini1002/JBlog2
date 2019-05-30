@@ -16,4 +16,9 @@
 		update blog set title=#{title}, logo=#{logo} where id = #{id}
 	]]>
 	</update>
+	<select id="getBlogTitleById" parameterType="string" resultType="string">
+	<![CDATA[
+		select title from blog where id = #{id}
+	]]>
+	</select>
 </mapper>

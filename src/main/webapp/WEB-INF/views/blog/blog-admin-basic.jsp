@@ -15,20 +15,23 @@
 		<div id="wrapper">
 			<div id="content" class="full-screen">
 			<c:import url="/WEB-INF/views/includes/blog-admin-menu.jsp"/>
-				<form action="${pageContext.request.contextPath}/${authUser.id}/admin/update" method="post" enctype="multipart/form-data">
+				<form
+					action="${pageContext.request.contextPath}/${authUser.id}/admin/update" 
+						method="post" enctype="multipart/form-data">
 			      	<input type="hidden" value="${blogVo.id }"/>
 	 		      	<table class="admin-config">
 			      		<tr>
 			      			<td class="t">블로그 제목</td>
-			      			<td><input type="text" size="40" name="title" value="${blogVo.title }"></td>
+			      			<td><input type="text" value="${blogVo.title }" name="title"></td>
 			      		</tr>
 			      		<tr>
 			      			<td class="t">로고이미지</td>
-			      			<td><img src="${pageContext.request.contextPath}/images/${blogVo.logo}"></td>      			
-			      		</tr>      		
+			      			<td><img src="${pageContext.request.contextPath}/images/${blogVo.logo}"></td>
+			      			<input type="hidden" name="logo" value="${blogVo.logo }"/>      			
+			      		</tr> 
 			      		<tr>
 			      			<td class="t">&nbsp;</td>
-			      			<td><input type="file" name="logoFile"></td>      			
+			      			<td><input type="file" name="logoFile" id="logoFile"></td>      			
 			      		</tr>           		
 			      		<tr>
 			      			<td class="t">&nbsp;</td>

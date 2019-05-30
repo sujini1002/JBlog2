@@ -35,5 +35,7 @@ public class PostDao {
 	public List<PostVo> getList(Map<String, Object> map) {
 		return sqlSession.selectList("post.getList", map);
 	}
-
+	public Long getPostByCateNo(Long no) {
+		return sqlSession.selectOne("post.getPostByCateNo", no);
+	}
 }

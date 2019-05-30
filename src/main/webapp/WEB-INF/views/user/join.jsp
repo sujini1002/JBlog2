@@ -37,9 +37,11 @@
 						alert('이미 존재하는 이메일 입니다.\n 다른 이메일을 사용해 주세요');
 						$('#id').focus();
 						$('#id').val("");
+						$('#submit').hide();
 						return;
 					}
 					$('#check-button').hide();
+					$('#submit').show();
 					$('#check-image').show();
 				},
 				error : function(xhr, error){ //xmlHttpRequest?
@@ -48,13 +50,24 @@
 			});
 		})
 	});
+	
+	/* //전송
+	function submitBtn(){
+		var result = $("#agree-prov").is(":checked");
+		if(result != 'y'){
+			alert('이용약관에 동의해 주세요.');
+			return false;
+		}
+		return true;
+	} */
 </script>
 </head>
 <body>
 	<div class="center-content">
 		<jsp:include page="/WEB-INF/views/includes/header.jsp"/>
 		
-		<form:form modelAttribute="userVo" class="join-form" id="join-form" method="post" action="${pageContext.servletContext.contextPath }/user/join">
+		<form:form modelAttribute="userVo" name="user" class="join-form" id="join-form"
+			method="post" action="${pageContext.servletContext.contextPath }/user/join">
 			<label class="block-label" for="name">이름</label>
 			<form:input path="name"/>
 			<p class="validCheck"><form:errors path="name"/></p>
@@ -72,11 +85,11 @@
 			
 			<fieldset>
 				<legend>약관동의</legend>
-				<input id="agree-prov" type="checkbox" name="agreeProv" value="y">
+				<input id="agree-prov" type="checkbox" name="agreeProv">
 				<label class="l-float">서비스 약관에 동의합니다.</label>
 			</fieldset>
 
-			<input type="submit" value="가입하기">
+			<input type="submit" value="가입하기" id="submit">
 
 		</form:form>
 	</div>

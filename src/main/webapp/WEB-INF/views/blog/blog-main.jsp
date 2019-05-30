@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<% pageContext.setAttribute("newline", "\n");%>
 <!doctype html>
 <html>
 <head>
@@ -17,18 +18,20 @@
 				<div class="blog-content">
 					<c:choose>
 						<c:when test="${empty postVo }">
-							<h4>해당 카테고리에는 글이 존재 하지 않습니다.</h4>
+							<h4>해당 글이 존재 하지 않습니다.</h4>
 						</c:when>
 						<c:otherwise>
 							<h4>${postVo.title }</h4>
 							<p>
-								${postVo.content }
+								${fn:replace(postVo.content,newline,"<br>") }
 							<p>
+							
+							
 						</c:otherwise>
 					</c:choose>			
 				
 				
-					
+					<hr>
 				</div>
 				<ul class="blog-list">
 					<c:forEach items="${postList}" var="vo">

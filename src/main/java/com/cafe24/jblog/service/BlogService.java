@@ -38,6 +38,10 @@ public class BlogService {
 
 	// 블로그 정보 업데이트
 	public Boolean updateSkin(BlogVo blogVo) {
+		//블로그 제목이 공백이면
+		if("".equals(blogVo.getTitle())) {
+			blogVo.setTitle(blogDao.getBlogTitleById(blogVo.getId()));
+		} 
 		return blogDao.updateSkin(blogVo);
 	}
 
@@ -54,6 +58,12 @@ public class BlogService {
 
 	// 카테고리 삭제
 	public Boolean deleteCategory(String id, long no) {
+		if(postDao.getPostByCateNo(no)>0) {
+			return false;
+		}
+		if(categoryDao.getByNo(no)==categoryDao.basicCateNo(id)) {
+			return false;
+		}
 		CategoryVo categoryVo = new CategoryVo();
 		categoryVo.setId(id);
 		categoryVo.setNo(no);
