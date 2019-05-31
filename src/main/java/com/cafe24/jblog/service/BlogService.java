@@ -146,7 +146,14 @@ public class BlogService {
 
 		return filename;
 	}
-
+	// 글삭제
+	public Boolean deletePost(long category_no, long no) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("category_no", category_no);
+		map.put("no", no);
+		return postDao.delete(map);
+	} 
+ 
 	
 
 	

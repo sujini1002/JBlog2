@@ -38,4 +38,11 @@ public class PostDao {
 	public Long getPostByCateNo(Long no) {
 		return sqlSession.selectOne("post.getPostByCateNo", no);
 	}
+
+	public Boolean delete(Map<String, Object> map) {
+		int cnt =sqlSession.delete("post.delete", map);
+		return 1==cnt;
+	}
+
+
 }

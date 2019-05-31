@@ -155,4 +155,16 @@ public class BlogController {
 		return "redirect:/"+id+"/"+postVo.getCategory_no()+"/"+blogService.getPostId(postVo.getCategory_no());
 	}
 	
+	//글 삭제
+	@RequestMapping("/admin/post/delete/{category_no}/{no}")
+	public String adminDeletePost(@PathVariable(value="id")String id,
+							@PathVariable(value="category_no")long category_no,
+							@PathVariable(value="no")long no) {
+		
+		//글삭제
+		blogService.deletePost(category_no,no);
+		
+		return "redirect:/"+id+"/"+category_no;
+	}
+	
 }

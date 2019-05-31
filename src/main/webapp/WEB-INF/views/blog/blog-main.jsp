@@ -25,8 +25,11 @@
 							<p>
 								${fn:replace(postVo.content,newline,"<br>") }
 							<p>
-							
-							
+							<c:if test="${blogVo.id eq authUser.id }">
+								<a href="${pageContext.request.contextPath}/${blogVo.id}/admin/post/delete/${postVo.category_no}/${postVo.no}">
+									삭제<img src="${pageContext.request.contextPath}/assets/images/delete.jpg">
+								</a>
+							</c:if>
 						</c:otherwise>
 					</c:choose>			
 				

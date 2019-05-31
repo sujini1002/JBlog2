@@ -32,4 +32,10 @@
 		select count(*) from post where category_no = #{_parameter}
 	]]>
 	</select>
+	
+	<delete id="delete" parameterType="map">
+	<![CDATA[
+		delete from post where category_no = #{category_no} and no = #{no}
+	]]>
+	</delete>
 </mapper>
