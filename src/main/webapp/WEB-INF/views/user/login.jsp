@@ -18,6 +18,9 @@
       		<label>패스워드</label> <input type="password" name="password">
       		<input type="submit" value="로그인">
 		</form>
+		<c:if test="${fail ne 'Optional.empty' }">
+			<p class="validCheck" style="text-align:center">${fail }</p>
+		</c:if>
 	</div>
 </body>
 </html>

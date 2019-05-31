@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
+<script src="${pageContext.servletContext.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 </head>
 <body>
 	<div id="container">
@@ -26,12 +27,12 @@
 			      		</tr>
 			      		<tr>
 			      			<td class="t">로고이미지</td>
-			      			<td><img src="${pageContext.request.contextPath}/images/${blogVo.logo}"></td>
+			      			<td><img id="sampleimg" src="${pageContext.request.contextPath}/images/${blogVo.logo}"></td>
 			      			<input type="hidden" name="logo" value="${blogVo.logo }"/>      			
 			      		</tr> 
 			      		<tr>
 			      			<td class="t">&nbsp;</td>
-			      			<td><input type="file" name="logoFile" id="logoFile"></td>      			
+			      			<td><input type="file" name="logoFile" id="imgInp"></td>      			
 			      		</tr>           		
 			      		<tr>
 			      			<td class="t">&nbsp;</td>
@@ -44,4 +45,20 @@
 		<c:import url="/WEB-INF/views/includes/blog-footer.jsp"/>
 	</div>
 </body>
+<script type="text/javascript">
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#sampleimg').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#imgInp").change(function() {
+readURL(this);
+});
+
+</script>
 </html>

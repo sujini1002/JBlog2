@@ -1,5 +1,7 @@
 package com.cafe24.jblog.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -47,8 +50,11 @@ public class UserController {
 	}
 	
 	// 로그인 폼
-	@RequestMapping("/login")
-	public String login() {
+	@RequestMapping(value= {"/login","/login/{fail}"})
+	public String login(@PathVariable (value="fail")Optional<String> fail,Model model) {
+		if(fail.isPresent()) {
+			model.addAttribute("fail","아이디와 비밀번호가 일치하지 않습니다.");
+		}
 		return "user/login";
 	}
 	
